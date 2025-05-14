@@ -1,0 +1,103 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/telegram"
+  to = "/telegram/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/telegram/*"
+  to = "/telegram/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/vk"
+  to = "/vk/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/vk/*"
+  to = "/vk/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[build]
+  command = "NODE_ENV=production npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://telegram.org https://widget.yourgood.app https://api.yourgood.app https://mc.yandex.ru https://mc.yandex.com https://www.googletagmanager.com https://top-fwz1.mail.ru https://vk.com https://*.vk.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: blob:;
+      font-src 'self';
+      connect-src 'self' 
+        https://uqgqrpdtzosmwgoqwosv.supabase.co 
+        wss://uqgqrpdtzosmwgoqwosv.supabase.co
+        https://api.telegram.org 
+        https://hook.eu2.make.com 
+        https://hook.eu1.make.com
+        https://widget.yourgood.app
+        https://api.yourgood.app
+        https://mc.yandex.ru
+        https://mc.yandex.com
+        https://*.yandex.com
+        https://*.yandex.ru
+        https://clck.yandex.ru
+        https://www.google-analytics.com
+        https://top-fwz1.mail.ru
+        https://api.vk.com
+        https://*.vk.com;
+      frame-src 'self' https://yandex.ru https://*.yandex.ru https://widget.yourgood.app https://api.yourgood.app https://www.googletagmanager.com https://vk.com https://*.vk.com;
+      media-src 'self';
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'self' https://vk.com https://*.vk.com;
+      upgrade-insecure-requests;
+    """
+    Cache-Control = """
+      max-age=0,
+      no-cache,
+      no-store,
+      must-revalidate"""
+
+[[headers]]
+  for = "/vk/*"
+  [headers.values]
+    X-Frame-Options = "ALLOW-FROM https://vk.com"
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vk.com https://*.vk.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: blob:;
+      font-src 'self';
+      connect-src 'self' https://api.vk.com https://*.vk.com https://uqgqrpdtzosmwgoqwosv.supabase.co;
+      frame-ancestors 'self' https://vk.com https://*.vk.com;
+      upgrade-insecure-requests;
+    """
